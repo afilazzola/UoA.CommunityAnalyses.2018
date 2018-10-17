@@ -1,0 +1,74 @@
+---
+title: "An Introduction to Community Analyses for Ecologists"
+date: "October 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<div style="width:500px; height=350px">
+![](images/alex.jpg)
+</div>
+
+University of Alberta University | 
+----------------|-----------------------------------
+TBD   | **Instructor**: [Alex Filazzola](http://www.filazzola.info)
+TBD   | **Co-instructors**: 
+
+## General Information
+
+Ecologists are generally expected to know a larger range of statistics relative to other fields in biology. However, knowledge of the appropriate statistic test to answer an ecological question can be a major limitation for researchers. This workshop is an introduction to the different methods and statistical approaches to analyzing data in community ecology. The workshop will focus on how to match the available data to possible analyses. I will discuss relevant analyses when there are multiple response varaibles, multiple predictors, and examples of presenting interactions (both statistical and ecological). No prior knowledge is necessary, but some basic understanding of the R environment and community ecology will make the workshop more relevant and useful. The goal of this workshop will be to provide a glossary of potential analyses that will assist understanding and presenting ecological data. 
+
+
+**Who**: The course is aimed at R beginners to intermediate analysts. Some previous knowledge of R or analyses in community ecology would be useful.
+
+**Where**: TBD
+
+**Requirements**: Participants should bring a laptop with a Mac, Linux, or Windows operating system (not a tablet, Chromebook, etc.) with administrative privileges. If you want to work along during tutorial, you must have both Git & R studio installed on your own computer (See below for instructions). However, you are still welcome to attend because all examples will be presented via a projector in the classroom. 
+
+**Contact**: Please contact alex.filazzola@outlook.com for more information.
+
+## Schedule
+
+[Live Notepad](https://docs.google.com/document/d/1len4qcM-EkEMOl0NuNROyqlqMruqg4B4TZm4OS0NPoQ/edit)
+
+Time   | Goal
+-------|------------
+1:00   | Meet & greet. Test software
+1:10  | [Github Introduction](Github/Github.html)
+1:45  | [Github and R Studio](Git.rstudio/Git.rstudio.html)
+2:30  | *coffee break*
+3:00  | [Creating Reports with R Studio](Reports/Reports.html)
+3:30  | [Publish Reports and websites](Website/website.html)
+3:45  | Final discussions
+
+
+## Software
+
+Please install Git **before** installing R Studio. This allows seamless integration between the two programs because R Studio looks for Git on your computer, but Git does not look for R Studio. In the past, installation in the opposite order has been known to create issues. If you already installed R Studio and Git, but do not see the Git Tab in R Studio then you can follow [this support page](https://support.rstudio.com/hc/en-us/articles/200532077-Version-Control-with-Git-and-SVN) to troubleshoot. 
+
+
+#### Git
+
+Git is a version control system that lets you track who made changes to what when and has options for easily updating a shared or public version of your code on github.com. You will need a supported web browser (current versions of Chrome, Firefox or Safari, or Internet Explorer version 9 or above).
+
+You will need an account at github.com for parts of the Git lesson. Basic GitHub accounts are free and premium accounts are free to students. We encourage you to create a GitHub account if you don't have one already. Please consider what personal information you'd like to reveal. For example, you may want to review these instructions for keeping your email address private provided at GitHub.
+
+Information on how to install Git for each OS is provided by [Software Carpentry](https://software-carpentry.org/) and can be found [here](install.html)
+
+#### R
+
+[R](http://www.r-project.org/) is a programming language that is especially powerful for data exploration, visualization, and statistical analysis. To interact with R, we use [RStudio](http://www.rstudio.com/).
+
+
+Windows        |   Mac OS  X   |      Linux
+---------------|---------------|---------------
+Install R by downloading and running [this .exe](http://cran.r-project.org/bin/windows/base/release.htm) file from [CRAN](http://cran.r-project.org/index.html). Please also install the [RStudio IDE](http://www.rstudio.com/ide/download/desktop).| Install R by downloading and running [this .pkg](http://cran.r-project.org/bin/macosx/R-latest.pkg) file from [CRAN](http://cran.r-project.org/index.html). Please also install the [RStudio IDE](http://www.rstudio.com/ide/download/desktop).|You can download the binary files for your distribution from [CRAN](http://cran.r-project.org/index.html). Please also install the [RStudio IDE](http://www.rstudio.com/ide/download/desktop)
+
+## Other workshops
+
+If you enjoyed this workshop and were interested in learning more, I also run a workshop on R-basics and Introduction to Generalized Linear Modelling (GLM) found [here](https://afilazzola.github.io/YorkU.GLM.2017-04-28/). I also have a short introduction on using [Functions in R](https://afilazzola.github.io/Functions.workshop.YorkU2017/). 
+
+You can find similar style workshops, usually that are longer and go into more detail, with [Software Carpentry](https://software-carpentry.org/). They have teachers available globally and cover all forms of programming beyond R. 
