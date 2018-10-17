@@ -1,6 +1,6 @@
-name: "CSEE.Git.2018-07-18"
+name: "UoA.CommEcol.2018"
 navbar:
-  title: "CSEE.Git.2018-07-18"
+  title: "UoA.CommEcol.2018"
   left:
     - text: "info"
       href: index.html
