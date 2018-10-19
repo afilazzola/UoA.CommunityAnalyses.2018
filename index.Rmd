@@ -1,6 +1,6 @@
 ---
 title: "An Introduction to Community Analyses for Ecologists"
-date: "October 2018"
+date: "November 2018"
 output: html_document
 ---
 
@@ -14,8 +14,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 University of Alberta University | 
 ----------------|-----------------------------------
-TBD   | **Instructor**: [Alex Filazzola](http://www.filazzola.info)
-TBD   | **Co-instructors**: 
+November 6th, 2018   | **Instructor**: [Alex Filazzola](http://www.filazzola.info)
+2:00 - 5:00 pm   | **Co-instructors**: 
 
 ## General Information
 
@@ -24,7 +24,7 @@ Ecologists are generally expected to know a larger range of statistics relative 
 
 **Who**: The course is aimed at R beginners to intermediate analysts. Some previous knowledge of R or analyses in community ecology would be useful.
 
-**Where**: TBD
+**Where**: University of Alberta, Edmonton, CW 410 Conference Room, [Campus Map](images/CampusMap.jpg)
 
 **Requirements**: Participants should bring a laptop with a Mac, Linux, or Windows operating system (not a tablet, Chromebook, etc.) with administrative privileges. If you want to work along during tutorial, you must have both Git & R studio installed on your own computer (See below for instructions). However, you are still welcome to attend because all examples will be presented via a projector in the classroom. 
 
@@ -36,13 +36,12 @@ Ecologists are generally expected to know a larger range of statistics relative 
 
 Time   | Goal
 -------|------------
-1:00   | Meet & greet. Test software
-1:10  | [Github Introduction](Github/Github.html)
-1:45  | [Github and R Studio](Git.rstudio/Git.rstudio.html)
-2:30  | *coffee break*
-3:00  | [Creating Reports with R Studio](Reports/Reports.html)
-3:30  | [Publish Reports and websites](Website/website.html)
-3:45  | Final discussions
+2:00   | Meet & greet. Test software
+2:10  | [Analysis Fundamentals]
+2:45  | [Univariate Stats]
+3:30  | *coffee break*
+3:45 | [Multivariate Stats]
+4:30  | [Indices in Ecology]
 
 
 ## Software
