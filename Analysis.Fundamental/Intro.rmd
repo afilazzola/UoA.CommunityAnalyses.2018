@@ -109,6 +109,61 @@ This data is ready for univariate analyses to examine the effects of the treatme
 ```{r}
 data <- read.csv("PracticeData2.csv")
 
+## Using the spread function we can convert the data to be ready for multivariate analyses. 
+data.wide <- data %>% spread(Species, Abundance)
+
+## head(data.wide)
+
+kable(data.wide[1:10,]) %>% ## select only the first 20 rows 
+  kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+The `%>%` operator is called pipe and what it is saying to do is take the data that is to the left of it and put it in function to the right. Here we are taking the original data frame and putting it into the spread function. The spread function then asks which column you want to spread by and what values should be used to fill the dataframe. We want the species to be spread across as columns and abundance values to fill the table. 
+
+What about if we wanted to take wide data and make it long? We can accomplish this using the gather function
+
+```{r}
+
+## Using the father function we can convert the data to be ready for univariate analyses. 
+data.long <- data.wide %>% gather(Species, Abundance, 6:13)
+
+## head(data.wide)
+
+kable(data.long[1:10,]) %>% ## select only the first 20 rows 
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+```
+
+The gather function is the inversed version of spread. Again we pipe the dataset into the function, but here we are specifying want the column headings are going to be for two newly created columns. The first column will be the column names of the data we are gathering (the species names in this case) and the second column will be the values. The last argument specifies which tables are to be gathered. 
+
+### 1.4 Data Summarizing
+
+Sometimes for your analyses you do not want to use the raw data, but rather summary statistics. For example, conducting a regression on site-level abundance rather than on the individual plots. One of the simpliest ways of doing this is using `dplyr` package. The workflow for this is three steps: 1) call data, 2) choose predictor variables that are to be summarized by, and 3) choose the response variables that are to be summarized.
+
+Using the same dataset as before, let's calculate the mean, standard deviation, and n for my exclosure treatments. 
+
+```{r}
+
+data.summary <- data.long %>% group_by(Exclosure) %>% summarize(avg=mean(Abundance), stdev=sd(Abundance), n=length(Abundance))
+
+data.summary
+
+```
+
+The `group_by` is our grouping variable and `summarize` selects the response variables that can be summarize by any R function (e.g. `mean`, `sd`, & `length`) or by ones you have written. 
+
+The benefit of this format is that you can group by more variables to get summary statistics for all the subgroups. 
+
+```{r}
+
+data.summary <- data.long %>% group_by(Microsite, Exclosure) %>% summarize(avg=mean(Abundance), stdev=sd(Abundance), n=length(Abundance))
+
+data.summary
+
+```
+
+
+
 
 
 

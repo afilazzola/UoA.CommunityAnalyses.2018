@@ -1441,7 +1441,767 @@ Amsinckia
 </tbody>
 </table>
 <p>This data is ready for univariate analyses to examine the effects of the treatments on each species abundance. What if we wanted to do an ordination on this data? Well first we need to spread it using <code>dplyr</code> and <code>tidyr</code>packages.</p>
-<pre class="r"><code>data &lt;- read.csv(&quot;PracticeData2.csv&quot;)</code></pre>
+<pre class="r"><code>data &lt;- read.csv(&quot;PracticeData2.csv&quot;)
+
+## Using the spread function we can convert the data to be ready for multivariate analyses. 
+data.wide &lt;- data %&gt;% spread(Species, Abundance)
+
+## head(data.wide)
+
+kable(data.wide[1:10,]) %&gt;% ## select only the first 20 rows 
+  kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+Plot
+</th>
+<th style="text-align:left;">
+Microsite
+</th>
+<th style="text-align:left;">
+Exclosure
+</th>
+<th style="text-align:right;">
+Gradient
+</th>
+<th style="text-align:right;">
+SWC.Peak
+</th>
+<th style="text-align:right;">
+Amsinckia
+</th>
+<th style="text-align:right;">
+Brassica
+</th>
+<th style="text-align:right;">
+BromusH
+</th>
+<th style="text-align:right;">
+BromusR
+</th>
+<th style="text-align:right;">
+Erodium
+</th>
+<th style="text-align:right;">
+Hordeum
+</th>
+<th style="text-align:right;">
+Marrubium
+</th>
+<th style="text-align:right;">
+Schismus
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:left;">
+Open
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+11.8
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+58
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:left;">
+Shrub
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+12.4
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+62
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:left;">
+Open
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:left;">
+Shrub
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+5.8
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+70
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:left;">
+Open
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+9.4
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+61
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:left;">
+Shrub
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+6.2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+29
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:left;">
+Open
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+10.0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+29
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:left;">
+Shrub
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+4.8
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+47
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:left;">
+Open
+</td>
+<td style="text-align:left;">
+N
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+12.8
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:left;">
+Shrub
+</td>
+<td style="text-align:left;">
+N
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+7.6
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+31
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>%&gt;%</code> operator is called pipe and what it is saying to do is take the data that is to the left of it and put it in function to the right. Here we are taking the original data frame and putting it into the spread function. The spread function then asks which column you want to spread by and what values should be used to fill the dataframe. We want the species to be spread across as columns and abundance values to fill the table.</p>
+<p>What about if we wanted to take wide data and make it long? We can accomplish this using the gather function</p>
+<pre class="r"><code>## Using the father function we can convert the data to be ready for univariate analyses. 
+data.long &lt;- data.wide %&gt;% gather(Species, Abundance, 6:13)
+
+## head(data.wide)
+
+kable(data.long[1:10,]) %&gt;% ## select only the first 20 rows 
+  kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+Plot
+</th>
+<th style="text-align:left;">
+Microsite
+</th>
+<th style="text-align:left;">
+Exclosure
+</th>
+<th style="text-align:right;">
+Gradient
+</th>
+<th style="text-align:right;">
+SWC.Peak
+</th>
+<th style="text-align:left;">
+Species
+</th>
+<th style="text-align:right;">
+Abundance
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:left;">
+Open
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+11.8
+</td>
+<td style="text-align:left;">
+Amsinckia
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:left;">
+Shrub
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+12.4
+</td>
+<td style="text-align:left;">
+Amsinckia
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:left;">
+Open
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+<td style="text-align:left;">
+Amsinckia
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:left;">
+Shrub
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+5.8
+</td>
+<td style="text-align:left;">
+Amsinckia
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:left;">
+Open
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+9.4
+</td>
+<td style="text-align:left;">
+Amsinckia
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:left;">
+Shrub
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+6.2
+</td>
+<td style="text-align:left;">
+Amsinckia
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:left;">
+Open
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+10.0
+</td>
+<td style="text-align:left;">
+Amsinckia
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:left;">
+Shrub
+</td>
+<td style="text-align:left;">
+Y
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+4.8
+</td>
+<td style="text-align:left;">
+Amsinckia
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:left;">
+Open
+</td>
+<td style="text-align:left;">
+N
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+12.8
+</td>
+<td style="text-align:left;">
+Amsinckia
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:left;">
+Shrub
+</td>
+<td style="text-align:left;">
+N
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+7.6
+</td>
+<td style="text-align:left;">
+Amsinckia
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<p>The gather function is the inversed version of spread. Again we pipe the dataset into the function, but here we are specifying want the column headings are going to be for two newly created columns. The first column will be the column names of the data we are gathering (the species names in this case) and the second column will be the values. The last argument specifies which tables are to be gathered.</p>
+</div>
+<div id="data-summarizing" class="section level3">
+<h3>1.4 Data Summarizing</h3>
+<p>Sometimes for your analyses you do not want to use the raw data, but rather summary statistics. For example, conducting a regression on site-level abundance rather than on the individual plots. One of the simpliest ways of doing this is using <code>dplyr</code> package. The workflow for this is three steps: 1) call data, 2) choose predictor variables that are to be summarized by, and 3) choose the response variables that are to be summarized.</p>
+<p>Using the same dataset as before, let’s calculate the mean, standard deviation, and n for my exclosure treatments.</p>
+<pre class="r"><code>data.summary &lt;- data.long %&gt;% group_by(Exclosure) %&gt;% summarize(avg=mean(Abundance), stdev=sd(Abundance), n=length(Abundance))
+
+data.summary</code></pre>
+<pre><code>## # A tibble: 2 x 4
+##   Exclosure   avg stdev     n
+##   &lt;fct&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+## 1 N          10.8  28.6  1440
+## 2 Y          11.0  28.5   480</code></pre>
+<p>The <code>group_by</code> is our grouping variable and <code>summarize</code> selects the response variables that can be summarize by any R function (e.g. <code>mean</code>, <code>sd</code>, &amp; <code>length</code>) or by ones you have written.</p>
+<p>The benefit of this format is that you can group by more variables to get summary statistics for all the subgroups.</p>
+<pre class="r"><code>data.summary &lt;- data.long %&gt;% group_by(Microsite, Exclosure) %&gt;% summarize(avg=mean(Abundance), stdev=sd(Abundance), n=length(Abundance))
+
+data.summary</code></pre>
+<pre><code>## # A tibble: 4 x 5
+## # Groups:   Microsite [?]
+##   Microsite Exclosure   avg stdev     n
+##   &lt;fct&gt;     &lt;fct&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+## 1 Open      N          10.1  23.1   720
+## 2 Open      Y          10.6  23.2   240
+## 3 Shrub     N          11.4  33.2   720
+## 4 Shrub     Y          11.5  33.0   240</code></pre>
 </div>
 
 
