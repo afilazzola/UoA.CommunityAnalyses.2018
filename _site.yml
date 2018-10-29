@@ -4,12 +4,12 @@ navbar:
   left:
     - text: "info"
       href: index.html
-    - text: "Github"
-      href: Github/Github.html
-    - text: "Rstudio"
-      href: Git.rstudio/Git.rstudio.html
-    - text: "Reports"
-      href: Reports/Reports.html
+    - text: "Fundamentals"
+      href: Analysis.Fundamental//index.html
+    - text: "Univariate"
+      href: Univariate//index.html
+    - text: "Multivariate"
+      href: Indices//indices.html
     - text: "Websites"
       href: Website/website.html 
 output_dir: "."

@@ -40,8 +40,8 @@ Time   | Goal
 2:10  | [Analysis Fundamentals](Analysis.Fundamental//index.html)
 2:45  | [Univariate Stats](Univariate//index.html)
 3:30  | *coffee break*
-3:45 | [Multivariate Stats]
-4:30  | [Indices in Ecology]
+3:45 | [Multivariate analyses](Indices//indices.html)
+4:30  | [Bonus]
 
 
 ## Software
