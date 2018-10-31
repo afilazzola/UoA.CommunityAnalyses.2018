@@ -10,8 +10,8 @@ navbar:
       href: Univariate//index.html
     - text: "Multivariate"
       href: Indices//indices.html
-    - text: "Websites"
-      href: Website/website.html 
+    - text: "Ordinations"
+      href: Ordinations/ordination.html 
 output_dir: "."
 output:
   html_document:

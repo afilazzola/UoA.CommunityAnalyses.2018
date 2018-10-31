@@ -1,7 +1,7 @@
 ---
 title: Reducing dimensionality
 author: "Alex Filazzola"
-date: "June 18 2017"
+date: "Nov 2018"
 output:
   html_document:
     theme: sandstone
@@ -57,11 +57,84 @@ mean.div <- div.data %>% group_by(Microsite, Elevation) %>% summarize(Average.Di
 ggplot(mean.div) + geom_bar(aes(x=Elevation, y=Average.Diversity, fill=Microsite), color="black", stat="identity", position = "dodge") + scale_fill_brewer()
 ```
 
-Here, we have reduced the entire community composition into a single diversity index and used the mean to compare among sites. We can see that there appears to be a general trend with elevation. The sites at higher elevations tend to have larger differences between treatments. 
+Here, we have reduced the entire community composition into a single diversity index and used the mean to compare among sites. We can see that there appears to be a general trend with elevation. The sites at higher elevations tend to have larger differences between treatments.
 
-### 3.2 Effect-size estimates
+### 3.2 Diversity indices
 
-What if we were less interested in the raw values of our diversity index and instead were more interested in the relative difference between our treatments. In this case, we want to know only if the shrub has relatively higher diversity than the open microsites, rather than what that value is.
+The above diversity indices are usually to estimate local diversity. What if we were interested in the diversity between sites (beta) or the overall regional diversity (gamma). We are able to calculate these through a variety of different metrics that have been explored previously. First, let's explore beta diversity on a sample dataset using `betadiver`. If we do not specify the index we can the *a*, *b*, and *c* values for all sites. If an index is specified, then distance-based matrixes are generated using the relevant equation. 
+
+
+```{r}
+data(dune)
+
+beta.n <- betadiver(dune)
+plot(beta.n)
+
+beta.whit <- betadiver(dune, "w")
+beta.whit
+```
+
+Whittaker's index has limitations in that it increases sampling effort. Alternatives for estimating beta-diversity include dissimiliarity indices, such as Jaccard or Sorensen for presence/absence or Bray-Curtis for abundance data. These can be calculated using `vegdist`. More information and potential limitations of these indices can be found [here](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12029)
+
+Using the raw distance based matrix though can be uninformative. Instead, we may choose to find out the average beta-diversity values among treatments. Exploring the dune dataset again but now adding different manure treatments and then follow that up with a cluster analysis to determine the treatments that were similar in composition
+
+```{r}
+data(dune.env)
+
+## join column to summarize by
+dune2 <- cbind(dune.env["Manure"],dune)
+
+dune.man <- dune2 %>% group_by(Manure) %>% summarise_all(sum) %>% data.frame(.)
+
+BC.div <- vegdist(dune.man[,-1], method="bray") ## drop first column with treatment
+
+clus <- hclust(BC.div, "ward.D2") ## run cluster analysis
+plot(clus, label=dune.man$Manure) ## add labels for manure levels
+```
+
+### 3.3 Species accumulation curves
+
+Rarefaction curves and species accumulation curves are two different methods for determining changes in species richness with area or survey effort. However, these two items are not the same thing! This is probably the best definition of the difference: 
+
+> Rarefaction curves are useful for comparing species richness values for different sampling efforts. Rarefaction cannot be used for extrapolation as it does not provide an estimate of asymptotic richness. In addition, under-sampling which is common ..., often result in an over estimate of the number of ‘rare’ species (e.g. singletons and doubletons); and the greater number of ‘rare’ species reported in a dataset the more likely it is that other species that are present have not been detected.
+
+Using species accumulation curves it is possible to determine the heterogeneity of diversity between treatments or sites. You can also compare rarefaction curves to species accumulation curves. The difference between the two curves indicates aggregation or overdispersion of conspecific individuals. Put differently, the more the species accumulation curve deviates from the rarefaction curve, the less often individuals of the same species are found clustered together. 
+
+To examine this further, we can plot both rarefaction and species accumulation curves in `vegan`
+
+```{r}
+data(dune)
+
+accum1 <- specaccum(dune, method="rarefaction")
+accum2 <-specaccum(dune, method="random")
+
+plot(accum1, col="blue", ylim=c(0,30), ci.type="polygon", ci.col="#00FFFF40")
+plot(accum2, add=T, col="orange", ci.type="polygon", ci.col="#FFA50040")
+
+```
+
+Based on these curves we can see our data approach an asymptote. There is the chance though that some species were missed from our sampling. We can estimate approximately the expected number of species that were missed. These are based on exrapolated richness values calculated by a few individuals, includes Bob O'Hara who invented the `estimateR` software. See also the references by [Colwell & Coddington 1994](https://www.ncbi.nlm.nih.gov/pubmed/7972351) and [Chiu et al. 2014](https://www.ncbi.nlm.nih.gov/pubmed/24945937)
+
+We use the function `specpool` to determine the number of unsampled species. There are multiple calculations that are provided based on different authors. We try it here to see the output
+
+```{r}
+specpool(dune)
+
+```
+
+Here we can see that We are missing btween 1-5 species based on the different approaches and standard error. This relatively small missing number of species is expected given we saw asymptotes in our datasets. We can try this again using different treatments.  Here n represents the different number of sites. 
+
+```{r}
+data(dune.env)
+
+specpool(dune, dune.env$Management)
+
+```
+
+
+### 3.4 Effect-size estimates
+
+What if we were less interested in the raw values of our diversity index and instead were more interested in the relative difference between our treatments. Imagine our earlier example of shrub effects at different elevations. What if we want to know only if the shrub has relatively higher diversity than the open microsites, rather than what that value was. 
 
 These are generally called effect-size estimates and are popular in community ecology. One of the more commonly refered effect-size estimates are Hedge's g or Cohen's d. Both of these are often used in effect size estimates and are ratios of means and standard deviations between two populations. In this case, the two populations would be our two treatments. However, community ecology tends to use a few others. Two that are used commonly are log-response Ratio and relative interaction index. We will introduce the latter.
 
@@ -104,104 +177,3 @@ This can appear as an over simplification of your dataset, but effect size measu
 
 For those looking for a more robust calculation of effect sizes, you can explore bootstrapped effect sizes using the package [bootES](https://www.ncbi.nlm.nih.gov/pubmed/23519455)
 
-### 3.3 Ordinations
-
-An ordination is a data reduction technique that uses significantly more complicated math than the above examples. The basic premise is that an ordination fits a linearly uncorrelated components through mulitvariate data to maximize the most variation explained. Similar to fitting a line-of-best-fit through a cloud of data points. There are different approaches both among ordinations and within ordinations, but conceptually this is what is occurring. Ordinations can generally be separated into three categories: unconstrained (indirect gradient analysis), constrained (direct gradient analysis), and NMDS. [This website](http://ordination.okstate.edu/overview.htm) does an excellent job breaking down all the different examples of each with a short description of what is occuring. 
-
-Technically, NMDS is a type of unconstrained ordination. However, I have intentionally left it in a third category because it does something very different. NMDS calculates rank order and is a non-parametric version of other ordinations. Similar to how Kruskal-Wallis is the rank order equivalent of ANOVA. NMDS is hugely flexible and versatile, but is often criticised for not matching a distribution (again, like how Kruskal-Wallis does not follow a dsitribution) and the output may be suggested as correct, when it is not the optimal representation of data. The ecological community continues to debate this and for this exercise I will focus on principal component analysis (PCA) and redundancy analysis (RDA). However, for those interested in a great tutorial on NMDS check [here](https://jonlefcheck.net/2012/10/24/nmds-tutorial-in-r/).
-
-### 3.4 PCA and CCA
-
-PCA is a indirect gradient analysis. Indirect, in that we are trying to determine a principal component (line of best fit) through the data that explains the most variation but not  attribute that component to anything. We use the `dune` dataset within vegan as an example. 
-
-```{r}
-## Load data
-data(dune)
-
-## conduct pca
-pca <- rda(dune)
-
-## see output variables of PCA
-summary(pca)
-
-## plot PCA
-biplot(pca)
-
-
-```
-
-We used the function `rda` from vegan because it calculates a PCA when no constraining factor is specified. We use this instead of the base R version of PCA `princomp` because it is less versatile and because the output from the `rda` function has more options that can be used in other analyses. 
-
-Here PCA1 and PCA2 represents our indirect gradients that determine these species compositions. We are unsure what the mechanism behind these components are and that can be better understood in the constrained ordinations later. First, we check our ordination to make sure PCA1 and PCA2 are the best representations of our data. From the summary we can see that 29.5% and 21.6% of the variation is explained in those two axes, whereas the third only explains 9%. This suggests the first two axes are the best representation of our data. Finally, we look at the plot and use the clustering of species together to determine trends. Species that are parallel are correlated, species that are perpendicular are uncorrelated, and species that are opposite are negatively correlated. 
-
-If we are working with species abundance data, it is commonly recommended to use Hellinger transformation. Hellinger has a few advantages including not giving rare species high weight and low sensitivity to double zeros. The double zero problem is when two sites mutually are without a certain species and thus are sorted as more similar because of this share dissimilarity. The [work of Legendre](http://adn.biol.umontreal.ca/~numericalecology/Reprints/Legendre_&_Gallagher.pdf) does a great job of explaining when transformations of ordinations are required.
-
-Let's transform our data and present it again.
-
-```{r}
-## Load data
-dune.hell <- decostand(dune, method="hellinger")
-
-## conduct pca
-pca <- rda(dune.hell)
-
-## see output variables of PCA
-summary(pca)
-
-## plot PCA
-biplot(pca)
-```
-
-We have improved the amount of variation explained and centralized the biplot. Overall, this is an improvement and we know the transformation has address underlying issues with the analysis. 
-
-The next thing we want to do is determine whether we have captured the shape of the gradient. A PCA assumes a linear gradient, whereas a correspondance analysis (CA) assumes a unimodal relationship. Over larger gradients it is assumed that the species data will resemble a unimodal relationship. We can check this using a detrended correspondance analysis. A detrended correspondance analysis (DCA) can be used as its own form of analysis but it is another topic of debate like NMDS. However, DCA tends to be argued against more often than in favour. For the purposes of determining gradient shape, it is perfect. 
-
-```{r}
-## conduct DCA
-dca <- decorana(dune.hell)
-dca
-```
-
-The output of our dca suggests that our axis lengths for the first axes is 3.56. This correspond to the standard deviation of that components and suggest there could be unimodal distribution in the data. The approximate evaluation is as follows:
-` PCA & RDA <3 and 4< CA & CCA`
-
-Our number is in between suggesting that both linear and unimodal approximations of the data would be acceptable. 
-
-
-![](linearvsunimodal.jpg)
-
-Illustration of the rule how to select whether to use linear ordination methods (like PCA or RDA) or unimodal (CA, DCA or CCA) on the data. Upper diagram shows simulated community structured by a single environmental gradient, with number of species response curves. The diagram below shows the relationship between the length of the gradient sampled in the simulated community on the //x/-axis (in arbitrary units), and length of the first DCA ordination axies (in units of S.D.). The dataset which according to DCA is rather homogeneous (< 3 S.D.) has environmental gradient up to 2000 units long; the longer gradient results into heterogeneous dataset for which linear methods are not suitable. [OP of figure  & caption](https://www.davidzeleny.net/anadat-r/doku.php/en:ordination)
-
-
-
-### 3.5 Redundancy analysis
-
-Finally let's do a contrained ordination, RDA. A constrained ordination is a direct graident analysis because you suggesting what the composition of the components are that describe the data. Instead of the PC1 representing the x-axis, we will have RDA1 that is a combination of the predictor variables that we include. We can take a look at what this means. 
-
-```{r}
-## load soil chem variables
-data(varechem)
-
-## select only most important soil nutrients
-nutrients <- varechem[1:20,c("N","P","K","Ca","Mg")]
-
-## conduct RDA
-rda <- rda(dune.hell, nutrients)
-
-## output
-rda
-anova(rda)
-
-## plot output
-plot(rda)
-```
-
-There are two quick ways to determine if the RDA accurately describes the data. The key word in RDA is redundancy, implying that your gradient is essentially described twice. Once by the species data and once by the environmental variables. The more similar those describe the same trend, the greater redundancy and the better the ordination. Here, the eigenvalues for the constrained axes are about 75% of the unconstrained values that suggests there is some degree of redundancy, which is good. When we conduct a permutation test on the RDA we find no significance. 
-
-The p value being close to 0.05 and the relatively high level of redundancy suggest that these nutrient variables are not accurately explaining all the variation in our dataset. When we look at the plot, we can see that RDA1 is comprised mostly of the nutrients. This suggest that RDA2 might be better describe with some additional variables that are not soil nutrients. This could improve our RDA fit and make it valid. As it stands now though, we cannot present this. 
-
-### 3.6 Indiciator species analysis
-
-
-
-### 3.7 Species accumulation curves
