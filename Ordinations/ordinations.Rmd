@@ -9,7 +9,7 @@ output:
     toc_float: true
 ---
 
-
+![](comic.png)
 
 ### 4.0 What are ordinations
 

@@ -37,7 +37,7 @@ Ecologists are generally expected to know a larger range of statistics relative 
 Time   | Goal
 -------|------------
 2:00   | Meet & greet. Test software
-2:05  | [Analysis Fundamentals](Analysis.Fundamental//index.html)
+2:05  | [Analysis Fundamentals](Analysis.Fundamental//Intro.html)
 2:45  | [Univariate Stats](Univariate//index.html)
 3:15  | *coffee break*
 3:30 | [Multivariate analyses](Indices//indices.html)

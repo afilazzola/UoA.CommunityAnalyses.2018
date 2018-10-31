@@ -5,13 +5,13 @@ navbar:
     - text: "info"
       href: index.html
     - text: "Fundamentals"
-      href: Analysis.Fundamental//index.html
+      href: Analysis.Fundamental//intro.html
     - text: "Univariate"
       href: Univariate//index.html
     - text: "Multivariate"
       href: Indices//indices.html
     - text: "Ordinations"
-      href: Ordinations/ordination.html 
+      href: Ordinations/ordinations.html 
 output_dir: "."
 output:
   html_document:
