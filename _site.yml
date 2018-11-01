@@ -5,7 +5,7 @@ navbar:
     - text: "info"
       href: index.html
     - text: "Fundamentals"
-      href: Analysis.Fundamental//intro.html
+      href: Analysis.Fundamental//Intro.html
     - text: "Univariate"
       href: Univariate//index.html
     - text: "Multivariate"
