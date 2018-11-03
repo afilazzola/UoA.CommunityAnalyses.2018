@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 University of Alberta University | 
 ----------------|-----------------------------------
 November 6th, 2018   | **Instructor**: [Alex Filazzola](http://www.filazzola.info)
-2:00 - 5:00 pm   | **Co-instructors**: 
+2:00 - 5:00 pm   | **Co-instructors**: [Charlotte Brown](https://scholar.google.ca/citations?user=rOKTAQkAAAAJ&hl=en)
 
 ## General Information
 
@@ -47,17 +47,6 @@ Time   | Goal
 
 ## Software
 
-Please install Git **before** installing R Studio. This allows seamless integration between the two programs because R Studio looks for Git on your computer, but Git does not look for R Studio. In the past, installation in the opposite order has been known to create issues. If you already installed R Studio and Git, but do not see the Git Tab in R Studio then you can follow [this support page](https://support.rstudio.com/hc/en-us/articles/200532077-Version-Control-with-Git-and-SVN) to troubleshoot. 
-
-
-#### Git
-
-Git is a version control system that lets you track who made changes to what when and has options for easily updating a shared or public version of your code on github.com. You will need a supported web browser (current versions of Chrome, Firefox or Safari, or Internet Explorer version 9 or above).
-
-You will need an account at github.com for parts of the Git lesson. Basic GitHub accounts are free and premium accounts are free to students. We encourage you to create a GitHub account if you don't have one already. Please consider what personal information you'd like to reveal. For example, you may want to review these instructions for keeping your email address private provided at GitHub.
-
-Information on how to install Git for each OS is provided by [Software Carpentry](https://software-carpentry.org/) and can be found [here](install.html)
-
 #### R
 
 [R](http://www.r-project.org/) is a programming language that is especially powerful for data exploration, visualization, and statistical analysis. To interact with R, we use [RStudio](http://www.rstudio.com/).
@@ -67,8 +56,21 @@ Windows        |   Mac OS  X   |      Linux
 ---------------|---------------|---------------
 Install R by downloading and running [this .exe](http://cran.r-project.org/bin/windows/base/release.htm) file from [CRAN](http://cran.r-project.org/index.html). Please also install the [RStudio IDE](http://www.rstudio.com/ide/download/desktop).| Install R by downloading and running [this .pkg](http://cran.r-project.org/bin/macosx/R-latest.pkg) file from [CRAN](http://cran.r-project.org/index.html). Please also install the [RStudio IDE](http://www.rstudio.com/ide/download/desktop).|You can download the binary files for your distribution from [CRAN](http://cran.r-project.org/index.html). Please also install the [RStudio IDE](http://www.rstudio.com/ide/download/desktop)
 
+#### Packages
+
+Please install the `LearnCommAnalysis` package before attending. This package contains all the datasets, packages, and functions that will be used in the workshop. The package is available through Github and thus must be installed using `devtools` package. If you do not have `devtools`, please install that first before running the command below. There are multiple packages that are installed along-side this package. Therefore, the installation can take some time and could be prone to error. Please do this prior to attending to save time and troubleshoot errors. The most common error is that not all dependencies (i.e. packages that are dependent on other packages) were installed. Read the error message, and if this is an issue, install the package that is missing. 
+
+```{r eval=FALSE}
+library(devtools)
+install_github("afilazzola/LearnCommAnalysis")
+
+## Load package
+library(LearnCommAnalysis)
+```
+
+
 ## Other workshops
 
-If you enjoyed this workshop and were interested in learning more, I also run a workshop on R-basics and Introduction to Generalized Linear Modelling (GLM) found [here](https://afilazzola.github.io/YorkU.GLM.2017-04-28/). I also have a short introduction on using [Functions in R](https://afilazzola.github.io/Functions.workshop.YorkU2017/). 
+If you enjoyed this workshop and were interested in learning more, I also run a workshops on [R-basics and Introduction to Generalized Linear Modelling (GLM)](https://afilazzola.github.io/YorkU.GLM.2017-04-28/), [Using Github for Scientific Reproducibility](https://afilazzola.github.io/UoA.GithubWorkshop.2018/), and a short introduction on using [Functions in R](https://afilazzola.github.io/Functions.workshop.YorkU2017/). 
 
 You can find similar style workshops, usually that are longer and go into more detail, with [Software Carpentry](https://software-carpentry.org/). They have teachers available globally and cover all forms of programming beyond R. 
