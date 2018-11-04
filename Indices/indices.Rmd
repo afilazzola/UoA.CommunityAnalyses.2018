@@ -27,17 +27,17 @@ Ecological indices are an approach to simplify mutivariate data into univariate 
 Let's begin with a familiar one, Shannon-weaver's. This requires us to load the `vegan` library that is responsible for the majority of multivariate analyses in ecology. 
 
 ```{r warning=FALSE, message=FALSE}
+library(LearnCommAnalysis)
 library(vegan)
-library(tidyverse)
 
-data <- read.csv("multivar.csv")
 
 ## check to see where the species list are
-names(data)
+head(multivar)
+
 
 ## separate species and predictor columns
-spp.data <- data[,7:46] ## select only species
-pred.data <- data[,1:6] ## select only predictors and identifiers
+spp.data <- multivar[,7:46] ## select only species
+pred.data <- multivar[,1:6] ## select only predictors and identifiers
 
 ## calculate shannon index
 div.data <- diversity(spp.data, index = "shannon")
@@ -141,13 +141,12 @@ $$\frac{treatment - control}{treatment + control}$$
 Where this shines for community ecology, is that treatment can represent the presence of competing of facilitating  species, and the control is the absence of that species. Let's go back to our previous example. We want to know if the shrub is having a facilitative (+1) or competitive (-1) effect on the entire plant community. We calculate RII using the RII function
 
 ```{r warning=FALSE, message=FALSE}
-## Load RII function
-source("rii.r")
-se <- function(x) {sd(x)/sqrt(length(x))}
 
+?se
+?rii.fun
 
 ## convert identifier values as factors
-div.data[,1:5] <- apply(data[,1:5], 2, as.factor)
+div.data[,1:5] <- apply(div.data[,1:5], 2, as.factor)
 
 ## Use RII function to calculate RII
 rii.data <- rii.fun(div.data, "Microsite", Shrub, Open)

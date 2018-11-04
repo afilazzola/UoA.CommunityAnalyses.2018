@@ -236,6 +236,7 @@ div.tocify {
 <h3>4.1 PCA and CCA</h3>
 <p>PCA is a indirect gradient analysis. Indirect, in that we are trying to determine a principal component (line of best fit) through the data that explains the most variation but not attribute that component to anything. We use the <code>dune</code> dataset within vegan as an example.</p>
 <pre class="r"><code>library(vegan)
+library(LearnCommAnalysis)
 
 ## Load data
 data(dune)
@@ -536,7 +537,7 @@ rda</code></pre>
 ## 
 ## Model: rda(X = species, Y = varechem)
 ##          Df Variance      F Pr(&gt;F)  
-## Model    14  0.25511 1.4968  0.049 *
+## Model    14  0.25511 1.4968  0.051 .
 ## Residual  9  0.10957                
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
@@ -618,23 +619,22 @@ summary(indval)</code></pre>
 ##  Significance level (alpha): 0.05
 ## 
 ##  Total number of species: 30
-##  Selected number of species: 4 
+##  Selected number of species: 3 
 ##  Number of species associated to 1 group: 1 
 ##  Number of species associated to 2 groups: 0 
 ##  Number of species associated to 3 groups: 0 
-##  Number of species associated to 4 groups: 3 
+##  Number of species associated to 4 groups: 2 
 ## 
 ##  List of species associated to each combination: 
 ## 
 ##  Group 1  #sps.  1 
 ##           stat p.value  
-## Vicilath 0.756   0.025 *
+## Vicilath 0.756   0.033 *
 ## 
-##  Group 1+2+3+4  #sps.  3 
+##  Group 1+2+3+4  #sps.  2 
 ##           stat p.value    
 ## Poatriv  0.964   0.001 ***
-## Poaprat  0.903   0.045 *  
-## Lolipere 0.878   0.019 *  
+## Lolipere 0.878   0.013 *  
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <pre class="r"><code>## Compare species assemblages among management strategies
@@ -657,21 +657,82 @@ summary(indval2)</code></pre>
 ## 
 ##  Group BF  #sps.  1 
 ##           stat p.value  
-## Vicilath 0.756   0.035 *
+## Vicilath 0.756   0.037 *
 ## 
 ##  Group HF  #sps.  2 
 ##           stat p.value   
-## Rumeacet 0.851   0.006 **
-## Trifprat 0.775   0.018 * 
+## Rumeacet 0.851   0.004 **
+## Trifprat 0.775   0.005 **
 ## 
 ##  Group BF+HF+SF  #sps.  3 
-##           stat p.value    
-## Poatriv  0.964   0.001 ***
-## Poaprat  0.896   0.031 *  
-## Lolipere 0.875   0.008 ** 
+##           stat p.value   
+## Poatriv  0.964   0.002 **
+## Poaprat  0.896   0.027 * 
+## Lolipere 0.875   0.014 * 
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <p>Here we can see that the addition of manure results in the presence of two additional species that when manure is missing. Similarly, the different management strategies each form unique assemblages.</p>
+</div>
+<div id="hack-a-thon-practice" class="section level3">
+<h3>4.6 Hack-a-thon practice</h3>
+<p>Try an example on your own from one of the datasets we looked at earlier. The <code>multivar</code> dataset has measured the community composition of different shrub and open microsites along an elevational gradient over multiple years. The research question you are to explore is how does the shrub effect changes in community composition along this elevation gradient.</p>
+<pre class="r"><code>head(multivar)</code></pre>
+<pre><code>##   year Region Site Elevation Rep Microsite S.barbatus B.rubens
+## 1 2016 Mojave  2.5      1100   1     Shrub          1       12
+## 2 2016 Mojave  2.5      1100   1      Open          3        9
+## 3 2016 Mojave  2.5      1100   2     Shrub          0       15
+## 4 2016 Mojave  2.5      1100   2      Open          0        3
+## 5 2016 Mojave  2.5      1100   3     Shrub          2        3
+## 6 2016 Mojave  2.5      1100   3      Open          0        2
+##   E.cicutarium B.hordeaceus P.secunda D.kelloggii P.ovata C.barbigera
+## 1            0            0         0           0       0           0
+## 2            0            0         0           0       0           0
+## 3            0            0         0           0       0           0
+## 4            0            0         0           0       0           0
+## 5            0            0         0           0       0           1
+## 6            0            0         0           0       0           0
+##   L.gracilis C.exserta A.wrangelianus D.capitatum Pectocarya.spp.
+## 1          0         0              0           0               3
+## 2          0         0              0           0               2
+## 3          0         0              0           0               1
+## 4          0         0              0           0               0
+## 5          0         0              0           0               5
+## 6          0         0              0           0               0
+##   E.penduliflora A.tessellata A.adscensionis C.fremontii E.minutiflora
+## 1              0            0              0           0             0
+## 2              0            0              0           0             0
+## 3              0            0              0           0             0
+## 4              0            0              0           0             0
+## 5              0            0              0           0             0
+## 6              0            0              0           0             0
+##   P.membranaceum L.lasiocarpa M.glabrata R.neomexicana E.eremicum C.rigida
+## 1              0            0          0             0          0        0
+## 2              0            0          0             0          0        0
+## 3              0            0          0             0          0        0
+## 4              0            1          0             0          0        0
+## 5              0            0          0             0          0        0
+## 6              0            0          0             0          0        0
+##   P.crenulata E.wallacei C.brevipes C.claviformis Erinoginum.spp.
+## 1           0          0          0             0               0
+## 2           0          0          0             0               0
+## 3           0          0          0             0               0
+## 4           0          0          0             0               2
+## 5           0          0          0             0               0
+## 6           0          0          0             0               0
+##   M.bellioides E.exilis C.lasiophyllus L.setosissima A.tuberosa B.nigria
+## 1            0        0              0             0          0        0
+## 2            1        0              0             0          0        0
+## 3            2        0              0             0          0        0
+## 4            0        0              0             0          0        0
+## 5            0        0              0             0          0        0
+## 6            0        0              0             0          0        0
+##   N.demissum A.lentiginosus A.grandiflora H.vulgare C.intermedia
+## 1          0              0             0         0            0
+## 2          0              0             0         0            0
+## 3          0              0             0         0            0
+## 4          0              0             0         0            0
+## 5          0              0             0         0            0
+## 6          0              0             0         0            0</code></pre>
 </div>
 
 
