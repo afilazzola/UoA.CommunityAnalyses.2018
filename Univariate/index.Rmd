@@ -247,3 +247,5 @@ ggplot(gam.data, aes(x=year, y=ndvi)) + geom_point() +  geom_smooth(method = "ga
 ```
 
 Here we can see from the diagnostic plots that the residuals more closely resemble the fitted values and that we have a relatively normal distribution in the residuals. Using `ggplot` has a feature that allows for the plotting on GAMs in addition to the others we described, such as glm and linear models. 
+
+GAMs can also fitted random effects, and they fit a form of interaction that is similar to running two nested GAMs separated by the respective factors. Careful attention must be paid to the fitting of the smoothing terms and splines. It is not okay to trust the defaults. 
