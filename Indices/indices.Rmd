@@ -30,10 +30,7 @@ Let's begin with a familiar one, Shannon-weaver's. This requires us to load the 
 library(vegan)
 library(tidyverse)
 
-
 data <- read.csv("multivar.csv")
-
-#data <- read.csv("Indices//multivar.csv")
 
 ## check to see where the species list are
 names(data)
