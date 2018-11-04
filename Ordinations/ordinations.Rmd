@@ -153,7 +153,8 @@ grp <- cutree(clus, 4)
 
 ```
 
-We can plot the dendrogram to be more aesthetically pleasing using the `cluster` and `factoextra` packages. Although this is not necessary. Here we can clearly highlight the clustered groups that we generated. We can also use the function cophenetic to estimate the dissimilarity from the tree based on all the points. 
+We can plot the dendrogram to be more aesthetically pleasing using the `cluster` and `factoextra` packages. Although this is not necessary. Here we can clearly highlight the clustered groups that we generated. 
+
 ```{r warning=FALSE, message=FALSE}
 library(cluster)
 library(factoextra)
@@ -163,10 +164,6 @@ fviz_dend(clus, k = 4, # Cut in four groups
           color_labels_by_k = TRUE, # color labels by groups
           rect = TRUE # Add rectangle around groups
           ) 
-
-## Function cophenetic finds this estimated dissimilarity from a tree for evey pair of points. 
-cor(dis, cophenetic(clus))
-
 ```
 
 The next question is do these cluster map on to a treatment or measured variate. We can compare the clustered groups against different environmental variables. Let's compare the measured nitrogen against the groups that were generated. We can also common parametric analyses, such as ANOVAs, to determine if there are statistical differences among the groups. 
