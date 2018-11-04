@@ -332,16 +332,12 @@ summary(m2) ##output of model</code></pre>
 </div>
 <div id="pairwise-comparisons-and-packages" class="section level3">
 <h3>2.2 Pairwise comparisons and packages</h3>
-<p>To see which drug is most effective, we need to conduct pairwise comparisons. There are many packages that are available in R to do this. One of the easier ones to work with is <code>lsmeans</code>. First, we need to go over how to install a package.</p>
-<pre class="r"><code>#install.packages(&quot;lsmeans&quot;)</code></pre>
-<p>Once you use that command a prompt will come up to specify a mirror. This means a repository online that you can download the package from. There are many all around the world, but pick the one closest to your location for reduced latency.</p>
-<p>After the package has successfully installed, load it using the <code>library</code> command. Notice that when you install you put the package in quotations, but when you load there are no quotes.</p>
+<p>To see which drug is most effective, we need to conduct pairwise comparisons. There are many packages that are available in R to do this. One of the easier ones to work with is <code>lsmeans</code>.</p>
 <pre class="r"><code>library(lsmeans)</code></pre>
 <pre><code>## The 'lsmeans' package is being deprecated.
 ## Users are encouraged to switch to 'emmeans'.
 ## See help('transition') for more information, including how
 ## to convert 'lsmeans' objects and scripts to work with 'emmeans'.</code></pre>
-<p>Now that the package has been installed and loaded we can use functions from that package. From now on, you will only need to load the package when you run a new project and not install it.</p>
 <p>The syntax for conducting a pairwise comparison is model, type of comparison (in this case pairwise), and lastly adjustment type. Tukey is a common technique that is also used for ANOVAs.</p>
 <pre class="r"><code>lsmeans(m2, pairwise~predictor, adjust=&quot;tukey&quot;) ##conduct pairwise comparisons on predictor</code></pre>
 <pre><code>## $lsmeans

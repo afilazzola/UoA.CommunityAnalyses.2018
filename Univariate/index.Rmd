@@ -97,21 +97,11 @@ Here we see that degrees freedom from the model (i.e. n-1), the residual devianc
 
 ### 2.2 Pairwise comparisons and packages
 
-To see which drug is most effective, we need to conduct pairwise comparisons. There are many packages that are available in R to do this. One of the easier ones to work with is `lsmeans`. First, we need to go over how to install a package. 
-
-```{r}
-#install.packages("lsmeans")
-```
-
-Once you use that command a prompt will come up to specify a mirror. This means a repository online that you can download the package from. There are many all around the world, but pick the one closest to your location for reduced latency. 
-
-After the package has successfully installed, load it using the `library` command. Notice that when you install you put the package in quotations, but when you load there are no quotes. 
+To see which drug is most effective, we need to conduct pairwise comparisons. There are many packages that are available in R to do this. One of the easier ones to work with is `lsmeans`. 
 
 ```{r}
 library(lsmeans)
 ```
-
-Now that the package has been installed and loaded we can use functions from that package. From now on, you will only need to load the package when you run a new project and not install it. 
 
 The syntax for conducting a pairwise comparison is model, type of comparison (in this case pairwise), and lastly adjustment type. Tukey is a common technique that is also used for ANOVAs. 
 
