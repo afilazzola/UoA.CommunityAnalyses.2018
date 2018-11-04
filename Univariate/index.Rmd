@@ -206,7 +206,7 @@ GAMs borrow all the flexibility of GLMs with the exception of being able to acco
 The main package for GAMs are `mgcv`. We can explore fitting a simple GAM model with the previous ranch data. What changes in a GAM is the presence of a smoothing term. 
 
 
-```{r}
+```{r warning=FALSE, message=FALSE}
 library(mgcv)
 library(tidyverse)
 
@@ -221,6 +221,9 @@ ggplot(gam.data, aes(x=year, y=ndvi)) + geom_point()
 m1 <- lm(ndvi~year, data=gam.data)
 summary(m1)
 
+## add linear model to plot
+ggplot(gam.data, aes(x=year, y=ndvi)) + geom_point()+  geom_smooth(method = "lm", formula = y ~x)
+
 ## check the fit
 par(mfrow = c(2,2))
 plot(m1)
@@ -232,7 +235,6 @@ When we plot changes in NDVI over three decades, we notice that there appears to
 Instead, we fit a GAM with year fitted to a smoothing term. You can specify the type of polynomial you want fit, but since this is more of a data exploration, I will leave that argument blank. 
 
 ```{r}
-
 
 ## Fit GAM
 m2 <- gam(ndvi~s(year), data=gam.data, method="REML")
