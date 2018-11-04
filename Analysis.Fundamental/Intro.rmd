@@ -20,6 +20,21 @@ output:
 
 **The Basics:** Data analysis generally has three steps that are data input, data manipulation, and data analysis. Although the analysis component always gets all the attention, including in this workshop, the first two are actually very important. Formatting data for the right analysis is a necessary evil. The data structure of an ordination is completely differnt than a linear model. Converting data between these formats can take hours in excel even with an experienced user depending on the size of the dataset. That is why I begin this workshop with some basics in data inputting and manipulation.
 
+First things first! We will be using different sample data, R functions, and packages throughout this workshop. To simplify things, I have created an R package that has the majority of the tools we need to explore this workshop. To install the package, you will need to install the R package `devtools`. This can be installed with the commands below.
+
+```{r eval=FALSE}
+install.packages("devtools")
+```
+
+After that, run the following code to install the package that has all the content for this workshop.
+```{r, warning=FALSE, message=FALSE}
+library(devtools)
+install_github("afilazzola/LearnCommAnalysis", force=TRUE)
+
+library(LearnCommAnalysis)
+
+```
+
 
 ### 1.1 Data format
 
@@ -30,12 +45,11 @@ We are going to look at one of my published datasets: Alessandro Filazzola, Aman
 ```{r warning=FALSE, message= FALSE}
 library(tidyverse)
 library(knitr)
-library(kableExtra)
 
-data <- read.csv("PracticeData.csv")
+data(samplelong)
 
-kable(data[1:20,1:8]) %>% ## select only the first 20 rows and 8 columns
-  kable_styling(bootstrap_options = c("striped", "hover"))
+kable(samplelong[1:20,1:8])## select only the first 20 rows and 8 columns
+
 ```
 
 In this study, we compared the shrub effects on the annual plant community when herbivores are removed (exclosure) and when water is added (watered). Data should be structured with the first columns being identifiers, such as plot ID and site names. These are typically not used in your data analysis and therefore should be at the beginning to not get messed with any manipulations that occur to the right. To the right of your identifiers should be your predictors/treatments. These are the variables that you will regress onto your response varaibles. Your predictors are often your experimental treatments or random effects that are included in models. In the case of this study, the predictors include microsite (shrub treatment), exclosure and watered. To the right of your predictors are your response variables. These are your measured values, such as biomass, abundance of individuals, and species richness. These are general guidelines and more often you will have variables that belong to both predictors and responses. This is a good rule of thumb for set-up that will make life easier moving forward. There are additional considerations that ensure a dataset is complete:
@@ -49,7 +63,7 @@ In this study, we compared the shrub effects on the annual plant community when 
 > Box 1.1 The str function
 
 ```{r}
-str(data[,1:8])
+str(samplelong[,1:8])
 ```
 
 The `str` function is surprisingly informative. Here is shows I have 240 observations that corresponds to my 240 plots. It  identifies that my factors: Microsite, Exclosure, and Watered, each have two levels (variables) within. If there was a misspelling, this would be the easiest way to identify it. This function can also provide information about your response variables. Here we can see the number of individuals and species are both discrete counts whereas biomass is a continuous variable. If there was accidentally some text in these columns, the class would likely be something different such as `factor` or `chr`. 
@@ -98,24 +112,22 @@ Let's take a look at a dataset that has been inputted like this. The common name
 
 ```{r, echo=FALSE}
 
-data <- read.csv("PracticeData2.csv")
+data(practice)
 
-kable(data[1:20,]) %>% ## select only the first 20 rows 
-  kable_styling(bootstrap_options = c("striped", "hover"))
+kable(practice[1:20,])  ## select only the first 20 rows 
+
 ```
 
 This data is ready for univariate analyses to examine the effects of the treatments on each species abundance. What if we wanted to do an ordination on this data? Well first we need to spread it using `dplyr` and `tidyr`packages.
 
 ```{r}
-data <- read.csv("PracticeData2.csv")
-
 ## Using the spread function we can convert the data to be ready for multivariate analyses. 
-data.wide <- data %>% spread(Species, Abundance)
+data.wide <- practice %>% spread(Species, Abundance)
 
 ## head(data.wide)
 
-kable(data.wide[1:10,]) %>% ## select only the first 20 rows 
-  kable_styling(bootstrap_options = c("striped", "hover"))
+kable(data.wide[1:10,]) ## select only the first 20 rows 
+
 ```
 
 The `%>%` operator is called pipe and what it is saying to do is take the data that is to the left of it and put it in function to the right. Here we are taking the original data frame and putting it into the spread function. The spread function then asks which column you want to spread by and what values should be used to fill the dataframe. We want the species to be spread across as columns and abundance values to fill the table. 
@@ -129,8 +141,8 @@ data.long <- data.wide %>% gather(Species, Abundance, 6:13)
 
 ## head(data.wide)
 
-kable(data.long[1:10,]) %>% ## select only the first 20 rows 
-  kable_styling(bootstrap_options = c("striped", "hover"))
+kable(data.long[1:10,])  ## select only the first 20 rows 
+
 
 ```
 
