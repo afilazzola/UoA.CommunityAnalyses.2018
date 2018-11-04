@@ -152,11 +152,12 @@ A Generalized Linear Mixed Model (GLMM) is a type of GLM that includes a random 
 
 ```{r}
 ## Make up some data
-grazing <- data.frame(cattle=c(20,18,19,18,17,19,15,13,14,12,14,11,10,9,11,8,9,10,7,5),biomass=sort(exp(rnorm(20))), year=rep(c(2014,2015,2016,2017),5))
+set.seed(2)
+ranch <- data.frame(cattle=c(20,18,19,18,17,19,15,13,14,12,14,11,10,9,11,8,9,10,7,5),biomass=sort(exp(rnorm(20))), year=rep(c(2014,2015,2016,2017),5))
 
-head(grazing)
+head(ranch)
 
-plot(grazing$cattle, grazing$biomass, ylab="Biomass (kg/m)", xlab="Cattle (per ha)", pch=19)
+plot(ranch$cattle, ranch$biomass, ylab="Biomass (kg/m)", xlab="Cattle (per ha)", pch=19)
 
 ```
 
@@ -169,7 +170,7 @@ To conduct a mixed model requires the package `lme4` and the random factor is fi
 ```{r, warning=FALSE, message=FALSE}
 library(lme4)
 
-m1 <- lmer(biomass ~ cattle + (1|year), data=grazing)
+m1 <- lmer(biomass ~ cattle + (1|year), data=ranch)
 summary(m1)
 ```
 
@@ -177,8 +178,8 @@ But wait?! There are no p.values? There is a fairly long, but [humourous explana
 
 ```{r}
 
-m1 <- lmer(biomass ~ cattle + (1|year), data=grazing)
-m0 <- lmer(biomass ~ 1 + (1|year), data=grazing)
+m1 <- lmer(biomass ~ cattle + (1|year), data=ranch)
+m0 <- lmer(biomass ~ 1 + (1|year), data=ranch)
 
 anova(m1,m0, test="Chisq")
 
@@ -189,15 +190,60 @@ The solution recommended by Bates is to use a Markov Chain Monte Carlo sample, b
 ```{r warning=FALSE, message=FALSE}
 library(lmerTest)
 
-m1 <- lmer(biomass ~ cattle + (1|year), data=grazing)
+m1 <- lmer(biomass ~ cattle + (1|year), data=ranch)
 anova(m1)
 ```
 
 ### 2.6 Generalized Additive Models
 
-GAMs borrow all the flexibility of GLMs with the exception of being able to account for non-linearity. A person with the above knowledge could easily fit a basic GAM once they have learned the syntax in R. However, there is some degree of complexity in determining the smoothing term that is associated with the fit. Dr. Gavin Simpson has many [resources](https://www.fromthebottomoftheheap.net/2014/05/09/modelling-seasonal-data-with-gam/) and tutorials that do a great job explaining everything that is GAM. In a sense, a GAM will do almost anything you ever want because it is a GLM with no boundaries. There are two general caveats I will leave here though before you consider the GAM route:
+GAMs borrow all the flexibility of GLMs with the exception of being able to account for non-linearity. A person with the above knowledge could easily fit a basic GAM once they have learned the syntax in R. However, there is some degree of complexity in determining the smoothing term that is associated with the fit. Dr. Gavin Simpson has many [resources](https://www.fromthebottomoftheheap.net/2014/05/09/modelling-seasonal-data-with-gam/) and tutorials that do a great job explaining everything that is GAM. In a sense, a GAM will do almost anything you ever want because it is a GLM with no boundaries. There are two general caveats though before you consider the GAM route:
 
 1) Fitting polynomials beyond quadratic rarely make sense ecologically (but remember that rarely is not the same as never and climate data often requires more complex polynomials)
 2) Currently, there is preference for GLMs over GAMs particularly when one includes interaction terms. 
 
 ![](gam.png)
+
+The main package for GAMs are `mgcv`. We can explore fitting a simple GAM model with the previous ranch data. What changes in a GAM is the presence of a smoothing term. 
+
+
+```{r}
+library(mgcv)
+library(tidyverse)
+
+year <- c(1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010)
+ndvi <- c(1.53,1.57,1.53,1.85,1.84,1.85,2.15,2.13,2.46,2.13,2.46,2.42,2.3,2.56,2.15,2.7,3.07,2.7,3.07,2.56,2.46,2.28,2.3,1.85,2.15,1.99,1.84,1.85,2.3,2.28,2.61)
+gam.data<- data.frame(year,ndvi)
+
+## Plot the data
+ggplot(gam.data, aes(x=year, y=ndvi)) + geom_point()
+
+## Run a linear model
+m1 <- lm(ndvi~year, data=gam.data)
+summary(m1)
+
+## check the fit
+par(mfrow = c(2,2))
+plot(m1)
+
+```
+
+When we plot changes in NDVI over three decades, we notice that there appears to be a non-linear trend, potentially following some form of cycle or determine by a driver that shifted twice significantly. If we were to fit a typical linear model, the response is significant. However, when we look at the diagnostic plots, there are some strongly suspicious findings. Particularly, with the residuals vs the fitted values. 
+
+Instead, we fit a GAM with year fitted to a smoothing term. You can specify the type of polynomial you want fit, but since this is more of a data exploration, I will leave that argument blank. 
+
+```{r}
+
+
+## Fit GAM
+m2 <- gam(ndvi~s(year), data=gam.data, method="REML")
+
+## check diagnostics
+par(mfrow = c(2,2))
+gam.check(m2)
+
+## see final plot
+ggplot(gam.data, aes(x=year, y=ndvi)) + geom_point() +  geom_smooth(method = "gam", formula = y ~s(x))
+
+```
+
+Here we can see from the diagnostic plots that the residuals more closely resemble the fitted values and that we have a relatively normal distribution in the residuals. Using `ggplot` has a feature that allows for the plotting on GAMs in addition to the others we described, such as glm and linear models. 
