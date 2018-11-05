@@ -29,7 +29,7 @@ install.packages("devtools")
 After that, run the following code to install the package that has all the content for this workshop.
 ```{r, warning=FALSE, message=FALSE}
 library(devtools)
-install_github("afilazzola/LearnCommAnalysis", force=TRUE)
+install_github("afilazzola/LearnCommAnalysis", dependencies=TRUE, force=TRUE)
 
 library(LearnCommAnalysis)
 
