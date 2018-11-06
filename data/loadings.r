@@ -1,6 +1,6 @@
 
 ## Installation of packages
-install.packages(c("lme4","lmerTest","lsmeans","tidyverse","vegan","indicspecies","reshape2","mgcv")
+install.packages(c("lme4","lmerTest","lsmeans","tidyverse","vegan","indicspecies","reshape2","mgcv"))
 
 ## load main articles
 library(tidyverse)

@@ -236,7 +236,7 @@ div.tocify {
 <pre class="r"><code>install.packages(&quot;devtools&quot;)</code></pre>
 <p>After that, run the following code to install the package that has all the content for this workshop.</p>
 <pre class="r"><code>library(devtools)
-install_github(&quot;afilazzola/LearnCommAnalysis&quot;, force=TRUE)
+install_github(&quot;afilazzola/LearnCommAnalysis&quot;, dependencies=TRUE, force=TRUE)
 
 library(LearnCommAnalysis)</code></pre>
 </div>
@@ -1110,28 +1110,40 @@ kable(data.long[1:10,])  ## select only the first 20 rows </code></pre>
 <div id="data-summarizing" class="section level3">
 <h3>1.4 Data Summarizing</h3>
 <p>Sometimes for your analyses you do not want to use the raw data, but rather summary statistics. For example, conducting a regression on site-level abundance rather than on the individual plots. One of the simpliest ways of doing this is using <code>dplyr</code> package. The workflow for this is three steps: 1) call data, 2) choose predictor variables that are to be summarized by, and 3) choose the response variables that are to be summarized.</p>
-<p>Using the same dataset as before, let’s calculate the mean, standard deviation, and n for my exclosure treatments.</p>
-<pre class="r"><code>data.summary &lt;- data.long %&gt;% group_by(Exclosure) %&gt;% summarize(avg=mean(Abundance), stdev=sd(Abundance), n=length(Abundance))
+<p>Using the same dataset as before, let’s calculate the mean, standard error, and n for my exclosure treatments.</p>
+<pre class="r"><code>data.summary &lt;- data.long %&gt;% group_by(Exclosure) %&gt;% summarize(avg=mean(Abundance), error=se(Abundance), n=length(Abundance))
 
 data.summary</code></pre>
 <pre><code>## # A tibble: 2 x 4
-##   Exclosure   avg stdev     n
+##   Exclosure   avg error     n
 ##   &lt;fct&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
-## 1 N          10.8  28.6  1440
-## 2 Y          11.0  28.5   480</code></pre>
+## 1 N          10.8 0.754  1440
+## 2 Y          11.0 1.30    480</code></pre>
 <p>The <code>group_by</code> is our grouping variable and <code>summarize</code> selects the response variables that can be summarize by any R function (e.g. <code>mean</code>, <code>sd</code>, &amp; <code>length</code>) or by ones you have written.</p>
 <p>The benefit of this format is that you can group by more variables to get summary statistics for all the subgroups.</p>
-<pre class="r"><code>data.summary &lt;- data.long %&gt;% group_by(Microsite, Exclosure) %&gt;% summarize(avg=mean(Abundance), stdev=sd(Abundance), n=length(Abundance))
+<pre class="r"><code>data.summary &lt;- data.long %&gt;% group_by(Exclosure, Species) %&gt;% summarize(avg=mean(Abundance), error=se(Abundance), n=length(Abundance))
 
 data.summary</code></pre>
-<pre><code>## # A tibble: 4 x 5
-## # Groups:   Microsite [?]
-##   Microsite Exclosure   avg stdev     n
-##   &lt;fct&gt;     &lt;fct&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
-## 1 Open      N          10.1  23.1   720
-## 2 Open      Y          10.6  23.2   240
-## 3 Shrub     N          11.4  33.2   720
-## 4 Shrub     Y          11.5  33.0   240</code></pre>
+<pre><code>## # A tibble: 16 x 5
+## # Groups:   Exclosure [?]
+##    Exclosure Species       avg  error     n
+##    &lt;fct&gt;     &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt;
+##  1 N         Amsinckia  0.0167 0.0167   180
+##  2 N         Brassica   0.111  0.0649   180
+##  3 N         BromusH    1.92   0.308    180
+##  4 N         BromusR   62.5    3.87     180
+##  5 N         Erodium    9.45   0.694    180
+##  6 N         Hordeum    0.367  0.178    180
+##  7 N         Marrubium  1.26   0.279    180
+##  8 N         Schismus  10.7    1.78     180
+##  9 Y         Amsinckia  0.     0.        60
+## 10 Y         Brassica   0.     0.        60
+## 11 Y         BromusH    2.58   0.927     60
+## 12 Y         BromusR   61.4    6.71      60
+## 13 Y         Erodium    9.55   1.38      60
+## 14 Y         Hordeum    0.117  0.0827    60
+## 15 Y         Marrubium  1.13   0.516     60
+## 16 Y         Schismus  13.6    3.15      60</code></pre>
 </div>
 
 
