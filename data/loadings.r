@@ -65,7 +65,7 @@ ndvi =c(1.53,1.57,1.53,1.85,1.84,1.85,2.15,2.13,2.46,2.13,2.46,2.42,2.3,2.56,2.1
 
 
 ## load extra datasets
-grazing <- read.table("data//grazing.txt")
-multivar <- read.table("data//multivar.txt")
-practice <- read.table("data//practice.txt")
-samplelong <- read.table("data//samplelong.txt")
+grazing <- read.table("https://raw.githubusercontent.com/afilazzola/UoA.CommunityAnalyses.2018/master/data/grazing.txt")
+multivar <- read.table("https://raw.githubusercontent.com/afilazzola/UoA.CommunityAnalyses.2018/master/data/multivar.txt")
+practice <- read.table("https://raw.githubusercontent.com/afilazzola/UoA.CommunityAnalyses.2018/master/data/practice.txt")
+samplelong <- read.table("https://raw.githubusercontent.com/afilazzola/UoA.CommunityAnalyses.2018/master/data/samplelong.txt")
