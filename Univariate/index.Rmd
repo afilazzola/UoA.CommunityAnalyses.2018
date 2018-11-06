@@ -222,6 +222,7 @@ Instead, we fit a GAM with year fitted to a smoothing term. You can specify the 
 
 ## Fit GAM
 m2 <- gam(ndvi~s(year), data=gam.data, method="REML")
+summary(m2)
 
 ## check diagnostics
 par(mfrow = c(2,2))
